@@ -16,8 +16,13 @@ class DrawingObject(object):
         self.x = 0
         self.y = 0
         pass
-    
+
 class Node(object):
+    """
+    Base class for all "nodes" and/or input data.
+
+    It's not reall intended to be instantiated directly as written.
+    """
     d = 20.0
     r = 10.0
     noisy = 3
@@ -45,17 +50,24 @@ class Node(object):
         },
         'other2': {
             'fg':'#0099FF',
-            'bg':'#003366',            
+            'bg':'#003366',
         },
     }
-    
-    def __init__(self,x,y,t,st,name=None):
+
+    def __init__(self,x,y,node_type,node_subtype,name=None):
+        """
+        :param x: The x position of this object on the canvas
+        :param y: The x position of this object on the canvas
+        :param node_type: The "type" of node this is.
+        :param node_subtype: The "subtype" of node this is.
+        :param name: The name of this node.
+        """
         if name is None:
             name = t
             pass
         self.name = name
         self.self = False
-        self.type = t
+        self.type = node_type
         self.subtype = st
         self.fg = Node.types[self.type]['bg']
         self.bg = Node.types[self.type]['fg']
@@ -63,28 +75,28 @@ class Node(object):
         self.num = Node.num
         self.id = id="node%04d" %(self.num)
         pass
-    
-    def get(self,dwg,num=None):
-        g = dwg.g(id="grp_%s" %(self.id))
+
+    def get(self,drawing_obj,num=None):
+        g = drawing_obj.g(id="grp_%s" %(self.id))
         if self.self:
-            self_loop = dwg.circle(center=(self.x,self.y - Node.r),
+            self_loop = drawing_obj.circle(center=(self.x,self.y - Node.r),
                                    r=Node.r/2.0,fill='none',stroke='#333333',
                                    stroke_width=2.0, stroke_opacity=0.66)
             g.add(self_loop)
             pass
         if 'input' == self.type:
             q = (3.0/4.0)*Node.r
-            node = dwg.rect((self.x-q,self.y-q),(q*2, q*2),fill=self.bg)
+            node = drawing_obj.rect((self.x-q,self.y-q),(q*2, q*2),fill=self.bg)
         else:
-            node = dwg.circle(center=(self.x,self.y),r=Node.r,fill=self.bg)
+            node = drawing_obj.circle(center=(self.x,self.y),r=Node.r,fill=self.bg)
             pass
         g.add(node)
         if 1 == self.subtype:
-            symbol = dwg.circle(center=(self.x,self.y),r=Node.r/2.0,fill='none',stroke=self.fg,stroke_width=2.0)
+            symbol = drawing_obj.circle(center=(self.x,self.y),r=Node.r/2.0,fill='none',stroke=self.fg,stroke_width=2.0)
             g.add(symbol)
             pass
         elif 2 == self.subtype:
-            symbol = dwg.rect((self.x - Node.r/4.0 ,self.y - Node.r/4.0),(Node.r/2.0,Node.r/2.0),fill='none',
+            symbol = drawing_obj.rect((self.x - Node.r/4.0 ,self.y - Node.r/4.0),(Node.r/2.0,Node.r/2.0),fill='none',
                               stroke=self.fg,stroke_width=2.0)
             g.add(symbol)
             pass
@@ -106,18 +118,18 @@ class Node(object):
                     pass
                 x += q
                 pass
-            symbol = dwg.path(tuple(d),fill='none',stroke=self.fg,stroke_width=2.0)
+            symbol = drawing_obj.path(tuple(d),fill='none',stroke=self.fg,stroke_width=2.0)
             g.add(symbol)
             pass
         if num is not None:
             q = (3.0/4.0)*Node.r
             x = self.x + q
             y = self.y + q + (Node.r/4.0)
-            text = dwg.text("%s" %(num),insert=(x,y),
+            text = drawing_obj.text("%s" %(num),insert=(x,y),
                             style="font-size:6px;font-family:Arial;stroke:white;stroke-width:1;fill:white",
                            )
             g.add(text)
-            text = dwg.text("%s" %(num),insert=(x,y),
+            text = drawing_obj.text("%s" %(num),insert=(x,y),
                             style="font-size:6px;font-family:Arial;stroke:black;stroke-width:0.25;fill:black",
                            )
             g.add(text)
@@ -130,9 +142,9 @@ class Node(object):
         self.y = y
     pass
 
-class Input(Node):
+class InputData(Node):
     def __init__(self,x=0,y=0):
-        super().__init__(x,y,'input',0,'Input')
+        super().__init__(x,y,'input',0,'Input Data')
         pass
     pass
 
@@ -224,6 +236,9 @@ class ConvolutionalNode(Node):
     pass
 
 class Layer(DrawingObject):
+    """
+    A drawing object which containes a "layer" of a network
+    """
     def __init__(self,num):
         pass
 
@@ -267,7 +282,7 @@ class Network(object):
         for s in defstr:
             n += 1
             if 'i' == s:
-                self.add_node(Input())
+                self.add_node(InputData())
             elif 'b' == s:
                 self.add_node(BackfedInput())
             elif 'B' == s:
@@ -313,14 +328,14 @@ class Network(object):
         bottom = height
         left = Node.d
         self.filename = "ANN-%s.svg" %(self.name)
-        dwg = svgwrite.Drawing(
+        drawing_obj = svgwrite.Drawing(
             filename=self.filename,
             debug=True,
             size=(width,height),
             style="font-size:6px;font-family:Arial;stroke:#999999;stroke-width:0.25;fill:none",
         )
-        self.g = dwg.g(id=self.id)
-        #self.g.add(dwg.title(self.name))
+        self.g = drawing_obj.g(id=self.id)
+        #self.g.add(drawing_obj.title(self.name))
         layer_num = -1
         svg_layers = []
         svg_lines = []
@@ -331,7 +346,7 @@ class Network(object):
             n += layer_size
             layer_height = self.layer_height(layer_size)
             layer_bottom = bottom - Node.d - net_x_middle + (layer_height / 2.0)
-            layer_group = dwg.g(id="%s_l%d" %(self.id, layer_num))
+            layer_group = drawing_obj.g(id="%s_l%d" %(self.id, layer_num))
             node_count = -1
             x = left + (layer_num * 2 * Node.d)
             for node in layer:
@@ -340,9 +355,9 @@ class Network(object):
                 node.center(x,y)
                 #print("%s (%s,%s)" %(node.name, node.x, node.y))
                 if number_nodes:
-                    svg_node = node.get(dwg, n)
+                    svg_node = node.get(drawing_obj, n)
                 else:
-                    svg_node = node.get(dwg)
+                    svg_node = node.get(drawing_obj)
                     pass
                 #print(svg_node.tostring())
                 layer_group.add(svg_node)
@@ -360,7 +375,7 @@ class Network(object):
                 for end_node in self.layers[cur_idx]:
                     end_x = end_node.x
                     end_y = end_node.y
-                    line = dwg.line(start=(start_x,start_y),end=(end_x,end_y),stroke='#333333',
+                    line = drawing_obj.line(start=(start_x,start_y),end=(end_x,end_y),stroke='#333333',
                                     stroke_width=2.0, stroke_opacity=0.66)
                     #print(line.tostring())
                     self.g.add(line)
@@ -370,9 +385,9 @@ class Network(object):
             pass
         for svg_layer in svg_layers:
             self.g.add(svg_layer)
-        dwg.add(self.g)
+        drawing_obj.add(self.g)
         print("Saving %s" %(self.filename))
-        dwg.save()
+        drawing_obj.save()
         pass
     pass
 
@@ -420,4 +435,3 @@ net = Network("Deep Belief Network 2",'DBN',"iiii|hhhh|pp|hhhh|pp|hhhh|pp|MMMM")
 net = Network("Restricted Boltzmann Machine",'RBM',"bbb|pppp").draw()
 net = Network("Restricted Boltzmann Machine 2",'RBM',"iii|hhh|rrrr").draw()
 #net = Network("Boltzmann Machine",'BM',"iiiiii|hhhhhh|rrrrrrr").draw()
-

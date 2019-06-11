@@ -1,0 +1,828 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import sys
+import svgwrite
+from svgwrite import cm, mm, px
+
+
+class DrawingObject(object):
+    CURREN_COUNT = 0
+    _ALL = []
+    _HASH = {}
+    """
+    Generic drawing object base class. Don't use
+
+    :param drw: A svgwrite.Drawing object
+
+    """
+    def __init__(self, width=10.0, height=10.0, padding = 0.0, x0 = 0.0, y0 = 0.0, drw):
+        if not isinstance(drw, svgwrite.Drawing):
+            raise ValueError("DrawingObject(s) require a svgwrite.Drawing object as the first parameter, not a '%s'" %(type(drw)))
+        DrawingObject.CURREN_COUNT += 1
+        self.do_num = DrawingObject.CURREN_COUNT
+        if self.__class__ != DrawingObject:
+            self.__class__.CURRENT_COUNT += 1
+            self.num = self.__class__.CURRENT_COUNT
+        else:
+            self.num = self.do_num
+            pass
+        self.x0 = x0
+        self.y0 = y0
+        self.shorthand = 'do'
+        self.drw = drw
+        self.width = width
+        self.height = height
+        DrawingObject._ALL.append(self)
+        pass
+
+    def get_y(self): return (self.height / 2.0) + self.y0
+    def set_y(self,val): self.y0 = val - (self.height / 2.0)
+    y = property(get_y, set_y)
+
+    def get_x(self): return (self.width / 2.0) + self.x0
+    def set_x(self,val): self.x0 = val - (self.width / 2.0)
+    x = property(get_x, set_x)
+
+    def get_x_min(self): return self.x0
+    x_min = property(get_x_min)
+    @property
+    def y_min(self): return self.y0
+    @property
+    def x_max(self): return self.x0 + self.width
+    @property
+    def y_max(self): return self.y0 + self.height
+
+    def get_bounding_box(self):
+        return (self.x_min - self.padding,self.y_min - self.padding),(self.x_max + self.padding, self.y_max + self.padding)
+
+    def get_center(self):
+        return (self.x,self.y)
+
+    def get_id(self):
+        if self._id is None:
+            self.id = "%s%04d" %(self.ID_PREFIX,self.get_num)
+        return self._id
+    pass
+
+class NodeDecoration(object):
+    def __init__(self, width=10.0, height=10.0, padding = 0.0, x0 = 0.0, y0 = 0.0, drw):
+        if arrowhead_nook_depth is None:
+            arrowhead_nook_depth = arrowhead_thickness
+            pass
+        self.x_0 = 0
+        self.x_1 = arrowhead_thickness
+        self.x_2 = arrowhead_nook_depth
+        self.x_3 = width / 2.0
+        self.x_4 = width - arrowhead_nook_depth
+        self.x_5 = width - arrowhead_thickness
+        self.x_6 = width
+        self.y_0 = 0
+        self.y_2 = height / 2.0
+        self.y_1 = self.y_2 - (arrowbody_height / 2.0)
+        self.y_3 = self.y_2 + (arrowbody_height / 2.0)
+        self.y_4 = height
+        self.width = width
+        self.height = height
+        self.style = "fill:none;stroke:black;stroke-width:0.5;alpha=0.5"
+        self.scale = 1.0
+        pass
+
+
+    def set_arrowhead_parameters(self, breadth = 0.5, length = 0.25, nook_offset = None):
+                   """
+           |------------width---------------|
+                              length  c-----d
+                               offset b-----d
+    +-c           i                   c       --y_0   c-+
+    |            /|                   |\               |
+    |           / |                   | \              |
+    h          /  |                   |  \             |
+    e    +- a-/---j-------------------b---\-k --y_1    |
+    i    |  |/             |               \|          |
+    g    |  h--------------o----------------d --y_2   d-+
+    h    |  |\             |               /|          |
+    t    +- g-----m-------------------f---/-l --y_3   arrowhead_height
+    |    |     \  |                   |  /
+    |    |      \ | \      |        / | /   |
+    |    |       \|  \     |       /  |/    |
+    +-g  |        n   \    |      /   e     | --y_4
+         |             |   |     |          |
+         |  |     |    |   |     |    |     |
+         | x_0   x_1  x_2 x_3   x_4  x_5   x_6
+         |
+         arrowbody_height
+        """
+
+
+    def get_double_arrow(self, drw, scale = 1.0):
+        d=['M', self.x_0 * self.scale, self.y_2 * self.scale, # h
+           'L', self.x_1 * self.scale, self.y_4 * self.scale, # n
+           'L', self.x_2 * self.scale, self.y_3 * self.scale, # m
+           'L', self.x_4 * self.scale, self.y_3 * self.scale, # f
+           'L', self.x_5 * self.scale, self.y_4 * self.scale, # e
+           'L', self.x_6 * self.scale, self.y_2 * self.scale, # d
+           'L', self.x_5 * self.scale, self.y_0 * self.scale, # c
+           'L', self.x_4 * self.scale, self.y_1 * self.scale, # b
+           'L', self.x_2 * self.scale, self.y_1 * self.scale, # j
+           'L', self.x_1 * self.scale, self.y_0 * self.scale, # i
+           'Z']
+        print(d)
+        return drw.path(d=d,id="double-arrow",style=self.style)
+
+    def get_right_arrow(self, drw, scale = 1.0):
+        d=['M', self.x_0 * self.scale, self.y_2 * self.scale, # g
+           'L', self.x_4 * self.scale, self.y_3 * self.scale, # f
+           'L', self.x_5 * self.scale, self.y_4 * self.scale, # e
+           'L', self.x_6 * self.scale, self.y_2 * self.scale, # d
+           'L', self.x_5 * self.scale, self.y_0 * self.scale, # c
+           'L', self.x_4 * self.scale, self.y_1 * self.scale, # b
+           'L', self.x_0 * self.scale, self.y_1 * self.scale, # a
+           'Z']
+        print(d)
+        return drw.path(d=d,id="right-arrow",style=self.style)
+
+    def get_left_arrow(self, drw, scale = 1.0):
+        d=['M', self.x_0 * self.scale, self.y_2 * self.scale, # h
+           'L', self.x_1 * self.scale, self.y_4 * self.scale, # n
+           'L', self.x_2 * self.scale, self.y_3 * self.scale, # m
+           'L', self.x_6 * self.scale, self.y_3 * self.scale, # l
+           'L', self.x_6 * self.scale, self.y_1 * self.scale, # k
+           'L', self.x_2 * self.scale, self.y_1 * self.scale, # j
+           'L', self.x_1 * self.scale, self.y_0 * self.scale, # i
+           'Z']
+        print(d)
+        return drw.path(d=d,id="double-arrow",style=self.style)
+
+    def get_grid(self,drw, scale = 1.0):
+        g = drw.g()
+        # Horizontals
+        g.add(drw.line(
+            start=(self.x_0 * self.scale, self.y_0 * self.scale),
+            end=(self.x_6 * self.scale, self.y_0 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        g.add(drw.line(
+            start=(self.x_0 * self.scale, self.y_1 * self.scale),
+            end=(self.x_6 * self.scale, self.y_1 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        g.add(drw.line(
+            start=(self.x_0 * self.scale, self.y_2 * self.scale),
+            end=(self.x_6 * self.scale, self.y_2 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        g.add(drw.line(
+            start=(self.x_0 * self.scale, self.y_3 * self.scale),
+            end=(self.x_6 * self.scale, self.y_3 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        g.add(drw.line(
+            start=(self.x_0 * self.scale, self.y_4 * self.scale),
+            end=(self.x_6 * self.scale, self.y_4 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        # Verticals
+        g.add(drw.line(
+            start=(self.x_0 * self.scale, self.y_0 * self.scale),
+            end=(self.x_0 * self.scale, self.y_4 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        g.add(drw.line(
+            start=(self.x_1 * self.scale, self.y_0 * self.scale),
+            end=(self.x_1 * self.scale, self.y_4 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        g.add(drw.line(
+            start=(self.x_2 * self.scale, self.y_0 * self.scale),
+            end=(self.x_2 * self.scale, self.y_4 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        g.add(drw.line(
+            start=(self.x_3 * self.scale, self.y_0 * self.scale),
+            end=(self.x_3 * self.scale, self.y_4 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        g.add(drw.line(
+            start=(self.x_4 * self.scale, self.y_0 * self.scale),
+            end=(self.x_4 * self.scale, self.y_4 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        g.add(drw.line(
+            start=(self.x_5 * self.scale, self.y_0 * self.scale),
+            end=(self.x_5 * self.scale, self.y_4 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        g.add(drw.line(
+            start=(self.x_6 * self.scale, self.y_0 * self.scale),
+            end=(self.x_6 * self.scale, self.y_4 * self.scale),
+            style="stroke:#FF0000;stroke-width:0.1;alpha=0.5")
+        )
+        return g
+    pass
+
+class Node(DrawingObject):
+    """
+    Base class for all network graph nodes.
+
+    It's not intended to be instantiated directly as written.
+
+    Also note that it is not "thread safe".
+    """
+    _num = None
+    _name = None
+    _description = None
+    _decoration = None
+    _fill_color = None
+    _fill_stroke = None
+    _stroke_color = None
+    _stroke_alpha = None
+    _is_hidden = False
+    _is_input = False
+    _is_output = False
+    _link_self = False
+    _shape = 'circle'
+    _shorthand = None
+
+    CURRENT_COUNT = 0
+    NOVAL = '-38294.127 No VAL'
+
+    diameter_scale = 20.0
+    radius_scale = 10.0
+
+    NODE_COLOR = '#FFFFFF'
+    INPUT_COLOR = '#FFCC00'
+    HIDDEN_COLOR = '#CCCC00'
+    OUTPUT_COLOR = '#66CC00'
+    DEFAULT_COLOR = '#CCFF00'
+    SHORTHAND_DICT = {}
+
+    def __init__(self):
+        super().__init__()
+        Node.CURRENT_COUNT += 1
+        self._num = Node.CURRENT_COUNT
+        pass
+
+    def get_drawer(self):
+        if 'circle' == self.get_shape():
+            return svgwrite.Drawing.circle
+        if 'square' == self.get_shape():
+            return svgwrite.Drawing.rect
+        raise ValueError("Don't know how to get a drawer for shapte '%s'" %(self.get_shape()))
+
+    def get_num(self): self._num
+
+    def get_is_square(self): return 'square' == self.get_shape()
+    def get_is_circle(self): return 'cicle' == self.get_shape()
+
+    def get_name(self): return self._name
+    def set_name(self,val): self._name = val; return self
+
+    def get_description(self): return self._description
+    def set_description(self,val): self._description = val; return self
+
+    def get_decoration(self): return self._decoration
+    def set_decoration(self,val): self._decoration = val; return self
+
+    def get_fill_color(self): return self._fill_color
+    def set_fill_color(self,val): self._fill_color = val; return self
+
+    def get_fill_stroke(self): return self._fill_stroke
+    def set_fill_stroke(self,val): self._fill_stroke = val; return self
+
+    def get_stroke_color(self): return self._stroke_color
+    def set_stroke_color(self,val): self._stroke_color = val; return self
+
+    def get_stroke_alpha(self): return self._stroke_alpha
+    def set_stroke_alpha(self,val): self._stroke_alpha = val; return self
+
+    def get_is_hidden(self): return self._is_hidden
+    def set_is_hidden(self,val): self._is_hidden = val; return self
+
+    def get_is_input(self): return self._is_input
+    def set_is_input(self,val): self._is_input = val; return self
+
+    def get_is_output(self): return self._is_output
+    def set_is_output(self,val): self._is_output = val; return self
+
+    def get_link_self(self): return self._link_self
+    def set_link_self(self,val): self._link_self = val; return self
+
+    def get_shape(self): return self._shape
+    def set_shape(self,val): self._shape = val; return self
+
+    def get_shorthand(self): return self._shorthand
+    def set_shorthand(self,val): self._shorthand = val; return self
+
+    def get_svg_grp(self,canvas,num=None):
+        self._grp_id = "g%04d" %self.get_num()
+        self._grp = drawing_obj.g(id=self._grp_id)
+        if self.get_is_square():
+            # Put square centered on x,y
+            q = (3.0/4.0)*self.radius_scale
+            node = drawing_obj.rect((self.x-q,self.y-q),(q*2, q*2),fill=self.get_fill_css())
+        elif self.get_is_circle():
+            node = drawing_obj.circle(center=(self.x,self.y),r=self.radius_scale,fill=self.get_fill_css())
+            pass
+        else:
+            raise ValueError("Cannot get_svg_grp on shape of type '%s'" %(self.get_shape()))
+        g.add(node)
+        if Node.SUBTYPE_INPUT == self.subtype:
+            symbol = drawing_obj.circle(center=(self.x,self.y),r=self.radius_scale/2.0,fill='none',stroke=self.fg,stroke_width=2.0)
+            g.add(symbol)
+            pass
+        elif Node.SUBTYPE_NORMAL == self.subtype:
+            symbol = drawing_obj.rect((self.x - self.radius_scale/4.0 ,self.y - self.radius_scale/4.0),(self.radius_scale/2.0,self.radius_scale/2.0),fill='none',
+                              stroke=self.fg,stroke_width=2.0)
+            g.add(symbol)
+            pass
+        elif Node.SUBTYPE_NOISY == self.subtype:
+            q = self.radius_scale/4.0
+            x = self.x-(q*2)
+            x_max = self.x+(q*3)
+            y1 = self.y+q
+            y2 = self.y-q
+            y = y1
+            d=["M"]
+            while x < x_max:
+                d.append(x)
+                d.append(y)
+                if y1 == y:
+                    y = y2
+                else:
+                    y = y1
+                    pass
+                x += q
+                pass
+            symbol = drawing_obj.path(tuple(d),fill='none',stroke=self.fg,stroke_width=2.0)
+            g.add(symbol)
+            pass
+        if num is not None:
+            q = (3.0/4.0)*self.radius_scale
+            x = self.x + q
+            y = self.y + q + (self.radius_scale/4.0)
+            text = drawing_obj.text("%s" %(num),insert=(x,y),
+                            style="font-size:6px;font-family:Arial;stroke:white;stroke-width:1;fill:white",
+                           )
+            g.add(text)
+            text = drawing_obj.text("%s" %(num),insert=(x,y),
+                            style="font-size:6px;font-family:Arial;stroke:black;stroke-width:0.25;fill:black",
+                           )
+            g.add(text)
+            pass
+        return g
+        pass
+
+    def center(self,x,y):
+        self.x = x
+        self.y = y
+    pass
+
+def set_and_ret_self(self,key,val):
+    setattr(self,key,val)
+    return self
+
+def _NewNodeClass(name,description,decoration,fill_color,fill_alpha,stroke_color,stroke_alpha,is_output,is_input,link_self,shape,shorthand,extras={}):
+    if shorthand in Node.SHORTHAND_DICT:
+        raise ValueError("Cannot define two classes with shorthand '%s'" %(shorthand))
+    class_name = ''.join(name.split(' '))
+    base_dict = {
+        '_name': name,
+        '_desc': description,
+        '_decoration': decoration,
+        '_fill_color': fill_color,
+        '_fill_color': fill_alpha,
+        '_stroke_color': stroke_color,
+        '_strole_alpha': stroke_alpha,
+        '_is_hidden': not (is_output and is_input),
+        '_is_input': is_input,
+        '_is_output': is_output,
+        '_link_self': link_self,
+        '_shape': shape,
+        '_shorthand': shorthand,
+        }
+    new_class = type(class_name,(Node,),base_dict)
+    for var_name, init_val in base_dict.items():
+        setattr(new_class,var_name,init_val)
+        pass
+    for name, val in extras.items():
+        setattr(new_class,name,val)
+        pass
+    Node.SHORTHAND_DICT[shorthand] = new_class
+    globals()[class_name]=new_class
+    pass
+
+_NewNodeClass(
+    name = 'Circle Node',
+    description = 'A generic circle node.',
+    shorthand = 'c',
+    decoration = None,
+    fill_color = None,
+    fill_alpha = 0.0,
+    stroke_color = 'black',
+    stroke_alpha = 1.0,
+    is_output = False,
+    is_input = False,
+    link_self = False,
+    shape = 'circle',
+    )
+
+import inspect
+import types
+for key in dir(CircleNode):
+    attr = getattr(CircleNode,key)
+    if (isinstance(attr,types.FunctionType)):
+        attr = inspect.getsource(attr).strip()
+        pass
+    print("%s=%s" %(key,attr))
+    pass
+
+_NewNodeClass(
+    name = 'Input Data',
+    description = 'A "node" representing an input feature rather than a artificial neural node.',
+    shorthand = 'i',
+    decoration = 'right-arrow',
+    fill_color = Node.INPUT_COLOR,
+    fill_alpha = 1.0,
+    stroke_color = None,
+    stroke_alpha = 1.0,
+    is_output = False,
+    is_input = False,
+    link_self = False,
+    shape = 'square',
+)
+_NewNodeClass(
+    name = 'Input Node',
+    description = 'An artificial neural node providing input (often with an identity function meaning input = output).',
+    shorthand = 'I',
+    decoration = 'right-arrow',
+    fill_color = Node.INPUT_COLOR,
+    fill_alpha = 1.0,
+    stroke_color = None,
+    stroke_alpha = 1.0,
+    is_output = False,
+    is_input = False,
+    link_self = False,
+    shape = 'square',
+)
+_NewNodeClass(
+    name = 'Backfed Node',
+    description = 'An artificial neural node with feedback (it\'s output is fed back to it as input).',
+    shorthand = 'B',
+    decoration = 'double-arrow',
+    stroke_color = None,
+    fill_color = Node.NODE_COLOR,
+    fill_alpha = 1.0,
+    stroke_alpha = 1.0,
+    is_output = False,
+    is_input = False,
+    link_self = False,
+    shape = 'square',
+)
+_NewNodeClass(
+    name = 'Noisy Node',
+    description = 'An artificial neural node that adds noise to the data.',
+    shorthand = 'N',
+    fill_color = Node.NODE_COLOR,
+    decoration = None,
+    fill_alpha = 1.0,
+    stroke_color = None,
+    stroke_alpha = 1.0,
+    is_output = False,
+    is_input = False,
+    link_self = False,
+    shape = 'square',
+)
+_NewNodeClass(
+    name = 'Output Node',
+    description = 'An artificial neural node that provides the output from the network.',
+    shorthand = 'O',
+    fill_color = Node.OUTPUT_COLOR,
+    decoration = None,
+    fill_alpha = 1.0,
+    stroke_color = None,
+    stroke_alpha = 1.0,
+    is_output = False,
+    is_input = False,
+    link_self = False,
+    shape = 'square',
+)
+_NewNodeClass(
+    name = 'Hidden Node',
+    description = 'An normal artificial neural node that recieves input from nodes and outputs to nodes (as opposed to recieving raw data/features or outputting to something outside the network.',
+    shorthand = 'H',
+    fill_color = Node.OUTPUT_COLOR,
+    decoration = None,
+    fill_alpha = 1.0,
+    stroke_color = None,
+    stroke_alpha = 1.0,
+    is_output = False,
+    is_input = False,
+    link_self = False,
+    shape = 'square',
+)
+_NewNodeClass(
+    name = 'Matched Output Node',
+    description = 'An artificial neural node that recieves input from nodes and outputs to nodes (as opposed to recieving raw data/features or outputting to something outside the network.',
+    shorthand = 'M',
+    fill_color = Node.OUTPUT_COLOR,
+    decoration = None,
+    fill_alpha = 1.0,
+    stroke_color = None,
+    stroke_alpha = 1.0,
+    is_output = False,
+    is_input = False,
+    link_self = False,
+    shape = 'square',
+)
+_NewNodeClass(
+    name = 'Probabilistic Hidden Node',
+    description = 'An artificial neural hidden node that applies a radial bias function to the difference between the test case and the node\s mean.',
+    shorthand = 'P',
+    fill_color = Node.OUTPUT_COLOR,
+    decoration = None,
+    fill_alpha = 1.0,
+    stroke_color = None,
+    stroke_alpha = 1.0,
+    is_output = False,
+    is_input = False,
+    link_self = False,
+    shape = 'square',
+)
+
+class MatchOutputNode(Node):
+    def __init__(self,x=0,y=0): return super().__init__(x,y,'output','features','Match Output Node')
+
+class HiddenNode(Node):
+    def __init__(self,x=0,y=0): return super().__init__(x,y,'hidden','normal','Hidden Node')
+
+class ProbabilisticHiddenNode(Node):
+    def __init__(self,x=0,y=0): return super().__init__(x,y,'hidden','normal','Probabilistic Hidden Node')
+
+class SpikingHiddenNode(Node):
+    def __init__(self,x=0,y=0): return super().__init__(x,y,'hidden','features','Spiking Hidden Node')
+
+class RecurrentNode(Node):
+    def __init__(self,x=0,y=0): return super().__init__(x,y,'other1','normal','Recurrent Node')
+
+class MemoryNode(Node):
+    def __init__(self,x=0,y=0): return super().__init__(x,y,'other1','normal','Memory Node')
+
+class DifferentMemoryNode(Node):
+    def __init__(self,x=0,y=0): return super().__init__(x,y,'other1','features','Different Memory Node')
+
+class KernelNode(Node):
+    def __init__(self,x=0,y=0): return super().__init__(x,y,'other2','features','Kernel Node')
+
+class ConvolutionalNode(Node):
+    def __init__(self,x=0,y=0): return super().__init__(x,y,'other2','normal','Convolutional or Pool Node')
+
+class Layer(DrawingObject):
+    ID_PREFIX = 'L'
+    CURRENT_COUNT = 0
+    """
+    A drawing object which containes a "layer" of a network
+    """
+    def __init__(self, x=None, y=None, network = None, nodes = []):
+        super().__init__(x,y)
+        self.nodes = nodes
+        self.network = network
+        pass
+
+    def add_node(self, node):
+        self.nodes.append(node)
+        return self
+
+    def get_nodes(self):
+        return self.nodes
+
+class Network(DrawingObject):
+    ID_PREFIX = 'W'
+    CURRENT_COUNT = 0
+
+    def __init__(self,name=None,id=None,defstr=None):
+        self.id = id
+        self.name = name
+        self.current_layer = None
+        self.layers = [self.current_layer]
+        if defstr is not None:
+            self.from_string(defstr)
+        pass
+
+    def new_layer(self):
+        self.current_layer = Layer(network = self)
+        self.layers.append(self.current_layer)
+        return self.current_layer
+
+    def add_node(self,node):
+        if self.current_layer is None:
+            self.add_layer()
+            pass
+        self.current_layer.add_node(node)
+        return self
+
+    def largest_layer_size(self):
+        largest_layer_size = 0
+        for layer in self.layers:
+            if len(layer) > largest_layer_size:
+                largest_layer_size = len(layer)
+                pass
+            pass
+        return largest_layer_size
+
+    def layer_height(self,layer_size):
+        if 0 == layer_size:
+            return 0.0
+        if 1 == layer_size:
+            return self.diameter_scale
+        return ((layer_size * 2.0) - 1.0 ) * self.diameter_scale
+
+    def from_string(self,defstr):
+        n = 0
+        for s in defstr:
+            n += 1
+            if 'i' == s:
+                self.add_node(InputData())
+            elif 'b' == s:
+                self.add_node(BackfedInput())
+            elif 'B' == s:
+                self.add_node(BackfedNode())
+            elif 'n' == s:
+                self.add_node(NoisyInput())
+            elif 'N' == s:
+                self.add_node(NoisyNode())
+            elif 'o' == s:
+                self.add_node(OutputNode())
+            elif 'M' == s:
+                self.add_node(MatchOutputNode())
+            elif 'h' == s:
+                self.add_node(HiddenNode())
+            elif 'p' == s:
+                self.add_node(ProbabilisticHiddenNode())
+            elif 's' == s:
+                self.add_node(SpikingHiddenNode())
+            elif 'r' == s:
+                self.add_node(RecurrentNode())
+            elif 'm' == s:
+                self.add_node(MemoryNode())
+            elif 'd' == s:
+                self.add_node(DifferentMemoryNode())
+            elif 'k' == s:
+                self.add_node(KernelNode())
+            elif 'c' == s:
+                self.add_node(ConvolutionalNode())
+            elif '|' == s:
+                self.new_layer()
+            else:
+                raise ValueError("Don't know what '%s' is." %(s))
+                pass
+            pass
+        return self
+
+    def draw(self,number_nodes=False):
+        largest_layer_size = self.largest_layer_size()
+        max_layer_height = self.layer_height(largest_layer_size)
+        net_x_middle = max_layer_height / 2.0
+        width = (len(self.layers)+1) * self.diameter_scale * 2.0
+        height = max_layer_height + self.diameter_scale
+        bottom = height
+        left = self.diameter_scale
+        self.filename = "ANN-%s.svg" %(self.name)
+        drawing_obj = svgwrite.Drawing(
+            filename=self.filename,
+            debug=True,
+            size=(width,height),
+            style="font-size:6px;font-family:Arial;stroke:#999999;stroke-width:0.25;fill:none",
+        )
+        self.g = drawing_obj.g(id=self.id)
+        #self.g.add(drawing_obj.title(self.name))
+        layer_num = -1
+        svg_layers = []
+        svg_lines = []
+        n = 0
+        for layer in self.layers:
+            layer_num += 1
+            layer_size = len(layer)
+            n += layer_size
+            layer_height = self.layer_height(layer_size)
+            layer_bottom = bottom - self.diameter_scale - net_x_middle + (layer_height / 2.0)
+            layer_group = drawing_obj.g(id="%s_l%d" %(self.id, layer_num))
+            node_count = -1
+            x = left + (layer_num * 2 * self.diameter_scale)
+            for node in layer:
+                node_count += 1
+                y = layer_bottom - (node_count * 2 * self.diameter_scale)
+                node.center(x,y)
+                #print("%s (%s,%s)" %(node.name, node.x, node.y))
+                if number_nodes:
+                    svg_node = node.get(drawing_obj, n)
+                else:
+                    svg_node = node.get(drawing_obj)
+                    pass
+                #print(svg_node.tostring())
+                layer_group.add(svg_node)
+                n -= 1
+                pass
+            svg_layers.append(layer_group)
+            n += layer_size
+            pass
+        cur_idx = 1
+        while cur_idx < 20 and cur_idx < len(self.layers):
+            prev_idx = cur_idx - 1
+            for start_node in self.layers[prev_idx]:
+                start_x = start_node.x
+                start_y = start_node.y
+                for end_node in self.layers[cur_idx]:
+                    end_x = end_node.x
+                    end_y = end_node.y
+                    line = drawing_obj.line(start=(start_x,start_y),end=(end_x,end_y),stroke='#333333',
+                                    stroke_width=2.0, stroke_opacity=0.66)
+                    #print(line.tostring())
+                    self.g.add(line)
+                    pass
+                pass
+            cur_idx += 1
+            pass
+        for svg_layer in svg_layers:
+            self.g.add(svg_layer)
+        drawing_obj.add(self.g)
+        print("Saving %s" %(self.filename))
+        drawing_obj.save()
+        pass
+    pass
+
+
+
+def main():
+    parser = argparse.ArgumentParser(description='A tool for generating quick-and-dirty *art-y* represenations of some types artificial neural networks *ann*s.')
+    parser.add_argument('specs', type=str, nargs='+')
+    parser.add_argument('--help-specs', default=False, dest='help_specs', help="Provide help with the 'specs' format and content.")
+    parser.add_argument('--quiet', '-q', default=0, dest='quiet', action='count',help="Decrease verbosity. Can have multiple.")
+    parser.add_argument('--save', '-s', default=None, type=str, dest='save_filename', help="Save to image file. Recommend file names ending in .svg for high quality or .png for other needs.")
+    parser.add_argument('--title', default=None, type=str, dest='title', help="Title for the figure.")
+    parser.add_argument('--verbose', '-v', default=0, dest='verbosity', action='count',help="Increase verbosity. Can have multiple.")
+    parser.add_argument('--fig-width-in', '-wi', default=None, type=float, dest='fig_width_in',help="Width in inches of the figure. ")
+    parser.add_argument('--fig-height-in', '-hi', default=None, type=float, dest='fig_height_in',help="Height in inches of the figure. ")
+    parser.add_argument('--fig-width-mm', '-wmm', default=None, type=float, dest='fig_width_mm',help="Width in inches of the figure. ")
+    parser.add_argument('--fig-height-mm', '-hmm', default=None, type=float, dest='fig_height_mm',help="Height in inches of the figure. ")
+
+    args = parser.parse_args()
+    args.verbosity = 1 + args.verbosity - args.quiet
+
+    for spec in args.specs:
+        n = Network()
+        n.from_string(spec)
+        pass
+    pass
+
+if __name__ == "__main__":
+    main()
+    sys.exit(0)
+    pass
+
+sys.exit(1)
+
+# In[7]:
+
+
+
+net = Network("Test",'test',"iii|bbb|nnn|hhh|ppp|sss|rrr|mmm|ddd|kkk|ccc|MMM|ooo").draw()
+net = Network("Legend",'legend',"oMckdmrsphnbi").draw()
+net = Network("Perceptron",'P',"iiii|o").draw()
+net = Network("Feed Forward",'FF',"ii|hh|o").draw()
+net = Network("Radial Basis Network",'RBN',"ii|hh|o").draw()
+net = Network("Deep Feed Forward",'DFF',"iii|hhhh|hhhh|oo").draw()
+net = Network("Deep Feed Forward 2",'DFF',"iiiiiiiii|hhhhhh|hhhhhh|hhhhhh|hhhhhh|hhhh|oo").draw()
+net = Network("Recurrent Neural Network",'RNN',"iii|rrr|rrr|ooo").draw()
+net = Network("Recurrent Neural Network 2",'RNN',"iiiii|hhhhh|rrrrr|rrrrr|rrrrr|rrrrr|hhhhh|oo").draw()
+net = Network("Long-Short Term Memory Network",'LSTM',"iii|mmm|mmm|ooo").draw()
+net = Network("Gated Recurrent Unit Network",'GRU',"iii|ddd|ddd|ooo").draw()
+net = Network("Deep Convolutional Network",'DCN',"iiiii|kkkkk|cccc|ccc|cc|hhhh|hhhh|ooo").draw()
+net = Network("Deep Convolutional Network 2",'DCN',"iiiii|hhhhh|kkkkk|cccc|ccc|cc|hhhh|hhhh|ooo").draw()
+net = Network("Convolutional Network",'CNN',"iiiii|kkkkk|cccc|ccc|cc|o").draw()
+net = Network("Deconvolutional Network",'DN',"ii|ccc|cccc|kkkkk|ooooo").draw()
+net = Network("Deconvolutional Network 2",'DN',"ii|cc|ccc|cccc|kkkkk|ooooo").draw()
+net = Network("Deep Convolutional Inverse Graphics Network",'DCIGN',"iiiii|kkkkk|cccc|ccc|ppp|ccc|cccc|kkkkk|ooooo").draw()
+net = Network("Generative Adversarial Network",'GAN',"bbb|hhh|hhh|MMM|hhh|hhh|MM").draw()
+net = Network("Generative Adversarial Network 2",'GAN',"iii|rrr|hhh|hhh|MMM|hhh|hhh|MM").draw()
+net = Network("Liquid State Machine",'LQM',"iii|ssss|ssss|ssss|oo").draw()
+net = Network("Extreme Learning Machine",'ELM',"iii|hhhh|hhhh|hhhh|oo").draw()
+net = Network("Echo State Network",'ESN',"iii|rrrr|rrrr|rrrr|oo").draw()
+net = Network("Autoencoder",'AE',"iiii|hh|MMMM").draw()
+net = Network("Autoencoder 2",'AE',"iiiiii|hhhh|hhh|hhhh|MMMMMM").draw()
+net = Network("Variational Autoencoder",'VAE',"iiii|pppp|MMMM").draw()
+net = Network("Variational Autoencoder 2",'AE',"iiiiii|pppp|ppp|pppp|MMMMMM").draw()
+net = Network("Denoising Autencoder",'DAE',"nnnn|hhhh|MMMM").draw()
+net = Network("Denoising Autencoder 2",'DAE',"iiiiii|NNNNNN|hhhh|hhh|hhhh|MMMMMM").draw()
+net = Network("Sparse Autoencoder",'SAE',"ii|hhhh|MM").draw()
+net = Network("Sparse Autoencoder 2",'SAE',"iiiii|hhhhh|hhh|hhhhh|MMMMM").draw()
+net = Network("Deep Residual Network",'DSN',"iii|hhh|hhh|hhh|hhh|hhh|hhh|hhh|oo").draw()
+net = Network("Kohonen Network",'KN',"ii|hhh|hhh|hhh").draw()
+net = Network("Support Vector Machine",'SVN',"iii|hhh|hhh|o").draw()
+net = Network("Neural Turing Machine",'NTM',"iii|hh|hh|hhh|mmm|o").draw()
+net = Network("Deep Belief Network",'DBN',"bbbb|pp|hhhh|pp|hhhh|pp|MMMM").draw()
+net = Network("Deep Belief Network 2",'DBN',"iiii|hhhh|pp|hhhh|pp|hhhh|pp|MMMM").draw()
+net = Network("Restricted Boltzmann Machine",'RBM',"bbb|pppp").draw()
+net = Network("Restricted Boltzmann Machine 2",'RBM',"iii|hhh|rrrr").draw()
+#net = Network("Boltzmann Machine",'BM',"iiiiii|hhhhhh|rrrrrrr").draw()

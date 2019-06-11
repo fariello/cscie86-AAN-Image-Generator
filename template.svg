@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="template.svg">
+  <defs
+     id="defs2">
+    <marker
+       inkscape:stockid="Arrow1Send"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Send"
+       style="overflow:visible;"
+       inkscape:isstock="true">
+      <path
+         id="path4504"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         transform="scale(0.2) rotate(180) translate(6,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow2Lend"
+       style="overflow:visible;"
+       inkscape:isstock="true">
+      <path
+         id="path4510"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         transform="scale(1.1) rotate(180) translate(1,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="4.083795"
+     inkscape:cx="-152.26698"
+     inkscape:cy="-2.3653395"
+     inkscape:document-units="mm"
+     inkscape:current-layer="g4797"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1918"
+     inkscape:window-height="1028"
+     inkscape:window-x="-7"
+     inkscape:window-y="1060"
+     inkscape:window-maximized="0">
+    <sodipodi:guide
+       position="0,0"
+       orientation="0,793.70079"
+       id="guide4854"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="210,0"
+       orientation="-1122.5197,0"
+       id="guide4856"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="210,297"
+       orientation="0,-793.70079"
+       id="guide4858"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="0,297"
+       orientation="1122.5197,0"
+       id="guide4860"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-57.202359,12.9559"
+       orientation="0,1"
+       id="guide4952"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-11.557619,-6.8673502"
+       orientation="0,1"
+       id="guide4538"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-6.568764,-4.2004501"
+       orientation="1,0"
+       id="guide4540"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-8.3035071,-6.8673504"
+       orientation="1,0"
+       id="guide4542"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-11.771049,-5.5342502"
+       orientation="0,1"
+       id="guide4544"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-11.771049,-4.2004501"
+       orientation="0,1"
+       id="guide4546"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-9.0365064,-8.2920544"
+       orientation="0,1"
+       id="guide4548"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g4797">
+      <rect
+         style="opacity:1;vector-effect:none;fill:#c5adc6;fill-opacity:0.69456063;stroke:none;stroke-width:0.90731853;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.69456063;paint-order:normal"
+         id="snode"
+         width="10"
+         height="10"
+         x="-5"
+         y="292">
+        <title
+           id="title4885">Square Node</title>
+      </rect>
+      <circle
+         style="opacity:1;vector-effect:none;fill:#c6ad06;fill-opacity:0.7125;stroke:none;stroke-width:1.16447175;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.69456063;paint-order:normal"
+         id="rnode"
+         cx="7.1054274e-015"
+         cy="297"
+         r="5">
+        <title
+           id="title4881">Round Node</title>
+      </circle>
+      <path
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.34472167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         d="m 0.988855,295 c 0.04693,0.3268 0.341267,1.00631 0.21343,1.3331 H -4 v 1.3338 h 5.202285 c 0.127837,0.32677 -0.1665,1.00629 -0.21343,1.3331 1.180292,-0.2371 2.251164,-1.23386 3.0111449,-2 C 3.240048,296.23385 2.169147,295.23709 0.988855,295 Z"
+         id="rarr"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccc">
+        <title
+           id="title4879">Right Arrow</title>
+      </path>
+      <path
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.34472167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         d="m -0.9888834,295 c -0.04693,0.3268 -0.341267,1.00631 -0.21343,1.3331 h 5.202285 v 1.3338 h -5.202285 c -0.127837,0.32677 0.1665,1.00629 0.21343,1.3331 -1.180292,-0.2371 -2.251164,-1.23386 -3.011145,-2 0.759952,-0.76615 1.830853,-1.76291 3.011145,-2 z"
+         id="larr"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccc">
+        <title
+           id="title4877">Left Arrow</title>
+      </path>
+      <path
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.34472167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         d="M -0.98884288,295.00012 C -2.1691348,295.23721 -3.2400766,296.23385 -4.0000284,297 c 0.7599809,0.76613 1.8308936,1.76329 3.01118552,2.00038 -0.0469299,-0.32681 -0.34126062,-1.00647 -0.21342352,-1.33323 h 2.4045042 c 0.1278372,0.32676 -0.1664935,1.00642 -0.21342347,1.33323 C 2.1691063,298.76329 3.2400192,297.76613 3.9999999,297 3.240048,296.23385 2.1691063,295.23721 0.98881433,295.00012 c 0.04693,0.32679 0.34126067,1.00645 0.21342347,1.33326 h -2.4045042 c -0.1278371,-0.32681 0.1664936,-1.00647 0.21342352,-1.33326 z"
+         id="darr"
+         inkscape:connector-curvature="0">
+        <title
+           id="title4924">Double Arrow</title>
+      </path>
+      <path
+         style="fill:none;stroke:#9a1f00;stroke-width:0.17175645px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.56066948"
+         d="m -3.9256502,298.70066 0.252879,-0.43746 0.28268,0.43746 0.277569,-0.64073 0.372087,0.64073 0.416351,-0.70746 0.407001,0.70746 0.435926,-1.88111 0.238415,1.88111 0.688806,-2.53731 0.09963,2.53731 0.574711,-3.66419 0.317595,3.66419 0.525333,-2.44982 0.08429,2.44982 0.337172,-1.92486 0.337171,1.92486 0.505757,-1.18117 0.252878,1.18117 0.505758,-0.6562 0.337172,0.6562 0.337171,-0.3186 0.252878,0.3186"
+         id="guassian-lines"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccccccccccccccccc"
+         inkscape:label="#gaussian-lines">
+        <title
+           id="title4975">Gaussian Lines</title>
+      </path>
+      <path
+         style="fill:#29adc6;fill-opacity:0.69456063;stroke:#000000;stroke-width:0.09961606px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 2.04e-4,295.04981 c -0.811201,0 -1.118584,0.99819 -1.221558,1.35373 -0.102974,0.35554 -0.379325,2.54665 -2.778646,2.54665 h 8 c -2.399321,0 -2.675264,-2.19111 -2.778238,-2.54665 C 1.118788,296.048 0.811406,295.04981 2.04e-4,295.04981 Z"
+         id="path4950"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:none;stroke:#54d500;stroke-width:0.37583598px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.82008368"
+         d="m 3.8098938,297.83901 -0.4961279,-1.17442 -1.1162856,1.9218 -1.24031659,-2.81153 -0.62015932,2.77594 -0.49612545,-1.81505 -1.11628574,1.17443 -0.6201593,-2.06414 -0.8682211,2.5624 -1.1162847,-0.92533"
+         id="noisy-lines"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccccc">
+        <title
+           id="title4977">Noisy Lines</title>
+      </path>
+      <path
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.34472167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         d="m -11.557619,299.86735 c -0.04693,0.3268 -0.341267,1.00631 -0.21343,1.3331 5.202285,0 5.202285,1.3338 5.202285,4.0916 h -1.7347431 c 0,-2.7578 0,-2.7578 -3.4675419,-2.7578 -0.127837,0.32677 0.1665,1.00629 0.21343,1.3331 -1.180292,-0.2371 -2.251164,-1.23386 -3.011145,-2 0.759952,-0.76615 1.830853,-1.76291 3.011145,-2 z"
+         id="larr-2"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccc">
+        <title
+           id="title4877-0">Left Arrow</title>
+      </path>
+    </g>
+  </g>
+</svg>
